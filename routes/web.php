@@ -20,13 +20,18 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-// Route::view('create', 'articles.create');
-// Route::view('show', 'articles.show');
 
 Route::middleware('auth')->group(function () {
-    Route::get('articles', 'ArticleController@index')->name('articles.index');
-    Route::get('articles/create', 'ArticleController@create')->name('articles.create');
-    Route::post('articles', 'ArticleController@store')->name('articles.store');
-    Route::get('articles/{article}', 'ArticleController@show')->name('articles.show');
-    Route::patch('articles/{article}', 'ArticleController@update')->name('articles.update');
+    //articles
+    Route::get('/articles', 'ArticleController@index')->name('articles.index');
+    Route::get('/articles/create', 'ArticleController@create')->name('articles.create');
+    Route::post('/articles', 'ArticleController@store')->name('articles.store');
+    Route::get('/articles/{article}', 'ArticleController@show')->name('articles.show');
+    Route::patch('/articles/{article}', 'ArticleController@update')->name('articles.update');
+    Route::get('/articles/{article}/edit', 'ArticleController@edit')->name('articles.edit');
+    Route::delete('/articles/{article}/delete','ArticleController@destroy')->name('articles.destroy');
+    //comments
+    Route::post('/comments/{article}','CommentController@store')->name('comments.store');
+    Route::patch('/comments/{comment}', 'CommentController@update')->name('comments.update');
+    Route::delete('/comments/{comment}','CommentController@destroy')->name('comments.destroy');
 });

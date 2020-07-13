@@ -13,8 +13,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    {{ __('You are logged in!') }}
+                    <a class="btn btn-primary btn-lg my-3" href="{{route('articles.index')}}">View Articles</a>
                 </div>
             </div>
         </div>

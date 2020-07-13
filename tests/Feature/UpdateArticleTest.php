@@ -15,13 +15,21 @@ class UpdateArticleTest extends TestCase
 
         $this->signIn();
     }
+    /** @test **/
+    public function a_user_can_only_view_edit_article_page()
+    {
+        $user = create(User::class);
+        $article = create(Article::class,[
+            'user_id' => $user->id
+        ]);
+        $this->get(route('articles.edit', $article))
+            ->assertStatus(Response::HTTP_FORBIDDEN);
+    }
 
     /** @test */
     public function a_user_can_update_an_article()
     {
         $this->withoutExceptionHandling();
-        $this->signIn();
-
         $article = create(Article::class, [
             'user_id' => auth()->user()->id
         ]);
@@ -29,6 +37,7 @@ class UpdateArticleTest extends TestCase
         $updated = [
             'title' => 'Changed title',
             'content' => 'Changed content.',
+            'tag' => 'tag',
         ];
 
         $this->patch("/articles/{$article->id}", $updated);
@@ -54,6 +63,18 @@ class UpdateArticleTest extends TestCase
         ];
 
         $this->patch("/articles/{$article->id}", $updated)
+            ->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+    /** @test */
+    public function author_can_only_view_his_articles()
+    {
+//        $this->withoutExceptionHandling();
+        $user = create(User::class);
+
+        $article = create(Article::class, [
+            'user_id' => $user->id
+        ]);
+        $this->get(route('articles.edit', $article->id))
             ->assertStatus(Response::HTTP_FORBIDDEN);
     }
 }

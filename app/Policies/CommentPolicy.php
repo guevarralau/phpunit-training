@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Article;
+use App\Comment;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ArticlePolicy
+class CommentPolicy
 {
     use HandlesAuthorization;
 
@@ -25,12 +25,12 @@ class ArticlePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Article  $article
+     * @param  \App\Comment  $comment
      * @return mixed
      */
-    public function view(User $user, Article $article)
+    public function view(User $user, Comment $comment)
     {
-        return $user->id == $article->user_id;
+        //
     }
 
     /**
@@ -48,34 +48,36 @@ class ArticlePolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Article  $article
+     * @param  \App\Comment  $comment
      * @return mixed
      */
-    public function update(User $user, Article $article)
+    public function update(User $user, Comment $comment)
     {
-        return $user->id == $article->user_id;
+        return $user->id == $comment->user_id
+            || $user->id == $comment->article->author->id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Article  $article
+     * @param  \App\Comment  $comment
      * @return mixed
      */
-    public function delete(User $user, Article $article)
+    public function delete(User $user, Comment $comment)
     {
-        return $user->id == $article->user_id;
+        return $user->id == $comment->user_id
+            || $user->id == $comment->article->author->id;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Article  $article
+     * @param  \App\Comment  $comment
      * @return mixed
      */
-    public function restore(User $user, Article $article)
+    public function restore(User $user, Comment $comment)
     {
         //
     }
@@ -84,10 +86,10 @@ class ArticlePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Article  $article
+     * @param  \App\Comment  $comment
      * @return mixed
      */
-    public function forceDelete(User $user, Article $article)
+    public function forceDelete(User $user, Comment $comment)
     {
         //
     }

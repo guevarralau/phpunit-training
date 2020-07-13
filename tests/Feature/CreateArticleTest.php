@@ -25,9 +25,8 @@ class CreateArticleTest extends TestCase
     public function a_user_can_create_new_article()
     {
         $article = raw(Article::class);
-
         $this->post('/articles', $article)
-             ->assertRedirect('/articles/1');
+             ->assertRedirect(route('articles.show',Article::first()->id ));
 
         $this->assertDatabaseHas('articles', [
             'title' => $article['title'],

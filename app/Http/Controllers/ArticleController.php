@@ -39,6 +39,13 @@ class ArticleController extends Controller
         return redirect()->route('articles.show', $article);
     }
 
+    public function edit(Article $article)
+    {
+        $this->authorize('update', $article);
+
+        return view('articles.edit')->with('article',$article);
+    }
+
     public function update(Article $article)
     {
         $this->authorize('update', $article);
@@ -46,5 +53,11 @@ class ArticleController extends Controller
         $article = tap($article)->update(request()->all());
 
         return redirect()->route('articles.show', $article);
+    }
+    public function destroy(Article $article)
+    {
+        $this->authorize('delete', $article);
+        $article->delete();
+        return redirect()->route('articles.index');
     }
 }
