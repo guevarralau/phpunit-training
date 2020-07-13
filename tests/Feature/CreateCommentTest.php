@@ -18,19 +18,21 @@ class CreateCommentTest extends TestCase
     /** @test */
     public function a_user_can_add_comment_to_article()
     {
-        $article = create(Article::class,[
-            'user_id' => auth()->id(),
-        ]);
-
+        $article = create(Article::class);
         $comment = raw(Comment::class,[
-            'content' => 'this post sucks',
+            'user_id' => auth()->id(),
+            'article_id' => $article->id,
         ]);
         $this->post(route('comments.store',
             [
                 'article' => $article->id
             ]),$comment)
             ->assertRedirect(route('articles.show',['article' => $article->id]));
-        $this->assertDatabaseHas('comments', $comment);
+        $this->assertDatabaseHas('comments', [
+            'content' => $comment['content'],
+            'user_id' => $comment['user_id'],
+            'article_id' => $comment['article_id'],
+        ]);
     }
 
     /** @test */

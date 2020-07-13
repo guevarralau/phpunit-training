@@ -20,22 +20,12 @@ class UpdateCommentsTest extends TestCase
     /** @test */
     public function comment_can_only_be_updated_by_comment_author_or_article_author()
     {
-//        this sh!t won't work fuqing database grammar parameterize() error
-//        $comment = create(Comment::class, [
-////            'user_id' => $commentAuthor = create(User::class)->id ,
-////            'article_id' => $article = create(Article::class, [
-////                'user_id' => $articleAuthor = create(User::class)->id,
-////            ])->id,
-////        ]);
-        $comment = new Comment;
-        $comment->fill([
-           'content' => 'old comment',
-           'user_id' => $commentAuthor = create(User::class)->id ,
-           'article_id' => $article = create(Article::class, [
-               'user_id' => $articleAuthor = create(User::class)->id,
-           ])->id,
+        $comment = create(Comment::class, [
+            'user_id' => $commentAuthor = create(User::class)->id ,
+            'article_id' => $article = create(Article::class, [
+                'user_id' => $articleAuthor = create(User::class)->id,
+            ])->id,
         ]);
-        $comment->save();
         $this->patch(
             route('comments.update', ['comment' => $comment->id]),
             ['content' => 'new comment']

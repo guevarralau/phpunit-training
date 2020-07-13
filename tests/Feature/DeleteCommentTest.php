@@ -18,19 +18,17 @@ class DeleteCommentTest extends TestCase
    /** @test */
    public function comment_author_can_delete_comment()
    {
-       $this->withoutExceptionHandling();
-       $comment = new Comment;
-       $comment->fill([
-           'content' => 'sample comment',
-           'user_id' => auth()->id(),
-           'article_id' => create(Article::class,
-           [
-               'user_id' => auth()->id()
-           ])->id
-       ])->save();
-//       dd($comment)
+//       $this->withoutExceptionHandling();
+       $comment = create(Comment::class,[
+           'user_id' => auth()->id()
+       ]);
        $this->delete(route('comments.destroy',$comment->id))
            ->assertRedirect(route('articles.show',$comment->article->id));
-       $this->assertDatabaseMissing('comments', $comment->toArray());
+       $this->assertDatabaseMissing('comments',[
+           'id' => $comment->id,
+           'content' => $comment->id,
+           'user_id' => $comment->user_id,
+           'article_id' => $comment->article_id,
+       ]);
    }
 }
